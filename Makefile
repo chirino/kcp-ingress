@@ -2,7 +2,6 @@
 SHELL := /usr/bin/env bash
 
 NUM_CLUSTERS := 2
-KCP_BRANCH := release-prototype-2
 
 .PHONY: all
 all: build
@@ -74,24 +73,8 @@ docker-build: ## Build docker image.
 ##@ Deployment
 
 .PHONY: local-setup
-local-setup: clean build kind kcp ## Setup kcp locally using kind.
+local-setup: clean build kind
 	./utils/local-setup.sh -c ${NUM_CLUSTERS}
-
-KCP = $(shell pwd)/bin/kcp
-kcp: ## Download kcp locally.
-	rm -rf ./tmp/kcp
-	git clone --depth=1 --branch ${KCP_BRANCH} https://github.com/kuadrant/kcp ./tmp/kcp
-	cd ./tmp/kcp && make
-	cp ./tmp/kcp/bin/cluster-controller $(shell pwd)/bin
-	cp ./tmp/kcp/bin/compat $(shell pwd)/bin
-	cp ./tmp/kcp/bin/crd-puller $(shell pwd)/bin
-	cp ./tmp/kcp/bin/deployment-splitter $(shell pwd)/bin
-	cp ./tmp/kcp/bin/kcp $(shell pwd)/bin
-	cp ./tmp/kcp/bin/kubectl-kcp $(shell pwd)/bin
-	cp ./tmp/kcp/bin/shard-proxy $(shell pwd)/bin
-	cp ./tmp/kcp/bin/syncer $(shell pwd)/bin
-	cp ./tmp/kcp/bin/virtual-workspaces $(shell pwd)/bin
-	rm -rf ./tmp/kcp
 
 CONTROLLER_GEN = $(shell pwd)/bin/controller-gen
 controller-gen: ## Download controller-gen locally if necessary.
