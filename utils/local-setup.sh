@@ -175,6 +175,9 @@ EOF
 
 sleep 2
 
+# setup a new kubeconfig file that's connected to a demo workspace.
+cp .kcp/admin.kubeconfig ./tmp/workspace.kubeconfig
+export KUBECONFIG=./tmp/workspace.kubeconfig
 kubectl kcp workspace --token user-1-token --workspace-directory-insecure-skip-tls-verify create demo --use
 
 # Import some apis into the KCP instance from the kind cluster.
@@ -211,7 +214,9 @@ echo "example: "
 echo ""
 echo "       ./bin/ingress-controller -kubeconfig .kcp/admin.kubeconfig"
 echo ""
-echo "kubectl is connected to the demo workspace."
+echo "This shell's kubectl is connected to the demo workspace by:"
+echo ""
+echo "       export KUBECONFIG=./tmp/workspace.kubeconfig"
 echo ""
 echo "KCP will be stopped when you exit this shell."
 
